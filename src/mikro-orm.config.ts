@@ -1,21 +1,21 @@
 import { Options } from '@mikro-orm/core';
 import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
-import { Logger } from '@nestjs/common';
-import { Category } from './category/category.entity';
 import { TSMigrationGenerator } from '@mikro-orm/migrations';
 
-const logger = new Logger('MikroORM');
 const MikroOrmConfig: Options = {
   entities: ['dist/**/*.entity.js'],
   entitiesTs: ['src/**/*.entity.ts'],
-  dbName: 'anime',
+  dbName: process.env.DATABASE_NAME,
   type: 'postgresql',
-  user: 'postgres',
-  password: '10242048',
-  host: 'localhost',
-  port: 5432,
+  user: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
+  host: process.env.HOST,
+  port: process.env.DATABASE_PORT as unknown as number,
   metadataProvider: TsMorphMetadataProvider,
-  cache: { pretty: true },
+  cache: {
+    pretty: true,
+    enabled: false,
+  },
   migrations: {
     tableName: 'mikro_orm_migrations', // name of database table with log of executed transactions
     path: './migrations', // path to the folder with migrations

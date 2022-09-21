@@ -1,6 +1,7 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { CategoryModule } from './category/category.module';
 
@@ -13,6 +14,7 @@ import { CategoryModule } from './category/category.module';
       autoSchemaFile: true,
     }),
     MikroOrmModule.forRoot(),
+    ConfigModule.forRoot(),
     CategoryModule,
   ],
 })

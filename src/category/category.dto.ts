@@ -1,7 +1,7 @@
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class CategoryType {
+export class CategoryDto {
   @Field(() => ID)
   id: number;
 
@@ -9,7 +9,7 @@ export class CategoryType {
   name: string;
 
   @Field(() => Int, { nullable: true })
-  parentId: number;
+  parentId?: number;
 
   @Field()
   createAt: Date;

@@ -1,6 +1,7 @@
 import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { CustomCategoryRepository } from './category.repository';
 
-@Entity()
+@Entity({ customRepository: () => CustomCategoryRepository })
 export class Category {
   @PrimaryKey()
   id: number;

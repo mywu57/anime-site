@@ -1,17 +1,17 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { CategoryDto } from './category.dto';
 import { CategoryService } from './category.service';
-import { CategoryType } from './category.type';
 
 @Resolver()
 export class CategoryResolver {
   constructor(private categorySerivce: CategoryService) {}
 
-  @Query(() => String)
-  getStuff() {
-    return 'This is working';
+  @Query(() => [CategoryDto])
+  async category(): Promise<CategoryDto[]> {
+    return await this.categorySerivce.fetchAll();
   }
 
-  @Mutation(() => CategoryType)
+  @Mutation(() => CategoryDto)
   createCategory(
     @Args('name') name: string,
     @Args('parentId') parentId: number,
