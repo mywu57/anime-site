@@ -17,14 +17,14 @@ export class CategoryService {
   }
 
   async create(createCategoryDto: CreateCategoryDto): Promise<Category> {
-    createCategoryDto = removeEmpty(createCategoryDto); 
+    createCategoryDto = removeEmpty(createCategoryDto);
     const category = this.categoryRepository.create(createCategoryDto);
     await this.categoryRepository.persistAndFlush(category);
     return category;
   }
 
   async category(id: number) {
-    return await this.categoryRepository.findOne({id: id});
+    return await this.categoryRepository.findOne({ id: id });
   }
 
   async delete(id: number) {

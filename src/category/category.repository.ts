@@ -15,7 +15,7 @@ export class CustomCategoryRepository extends EntityRepository<Category> {
     await this.persistAndFlush(existItem);
   }
 
-  async getDeleted(id?: number): Promise<any>{
+  async getDeleted(id?: number): Promise<any> {
     if (!!id) {
       return await this.findOne(
         { id },
@@ -23,9 +23,10 @@ export class CustomCategoryRepository extends EntityRepository<Category> {
           filters: {
             softDelete: {
               getOnlyDeleted: true,
-            }
-          }
-        });
+            },
+          },
+        },
+      );
     }
     return await this.findAll({
       filters: {

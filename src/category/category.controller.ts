@@ -2,6 +2,7 @@ import { CreateCategoryDto } from './dto/create-category.input';
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { Category } from './entities/category.entity';
+import { ParseIntPipe } from '@nestjs/common/pipes';
 
 @Controller('categories')
 export class CategoryController {
@@ -18,7 +19,7 @@ export class CategoryController {
   }
 
   @Get('/getDeleted/:id')
-  async getDeleted(@Param('id') id: number) {
+  async getDeleted(@Param('id', ParseIntPipe) id: number) {
     return this.categoryService.getDeleted(id);
   }
 
@@ -34,6 +35,6 @@ export class CategoryController {
 
   @Delete('/:id')
   async delete(@Param('id') id: number): Promise<void> {
-    return this.categoryService.delete(id)
+    return this.categoryService.delete(id);
   }
 }
