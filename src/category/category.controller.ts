@@ -12,9 +12,24 @@ export class CategoryController {
     return this.categoryService.fetchAll();
   }
 
+  @Get('/getDeleted')
+  async getAllDeleted() {
+    return this.categoryService.getDeleted();
+  }
+
+  @Get('/getDeleted/:id')
+  async getDeleted(@Param('id') id: number) {
+    return this.categoryService.getDeleted(id);
+  }
+
   @Post()
   async store(@Body() createCategoryDto: CreateCategoryDto): Promise<Category> {
     return this.categoryService.create(createCategoryDto);
+  }
+
+  @Post('/restore/:id')
+  async restore(@Param('id') id: number) {
+    return this.categoryService.restore(id);
   }
 
   @Delete('/:id')

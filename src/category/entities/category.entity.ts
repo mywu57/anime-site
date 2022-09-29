@@ -1,7 +1,7 @@
 import { Entity, Property, PrimaryKey, Index } from '@mikro-orm/core';
 import { Field, ObjectType, ID } from '@nestjs/graphql';
 import { CustomCategoryRepository } from '../category.repository';
-import WithSoftDelete from '../../../utils/decorator/soft-delete.decorator';
+import WithSoftDelete from '../../utils/decorator/soft-delete.decorator';
 
 @WithSoftDelete()
 @ObjectType()
@@ -21,19 +21,18 @@ export class Category {
 
   @Field()
   @Property()
-  public createAt: Date = new Date();
+  createAt: Date = new Date();
 
   @Field()
   @Property({ onUpdate: () => new Date() })
-  public updateAt: Date = new Date();
+  updateAt: Date = new Date();
 
   @Index()
   @Field()
   @Property({ nullable: true, type: 'timestamptz' })
   deletedAt?: Date;
 
-  constructor(name: string, parenId: number) {
+  constructor(name: string) {
     this.name = name;
-    this.parentId = parenId;
   }
 }
