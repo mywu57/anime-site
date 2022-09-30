@@ -17,12 +17,5 @@ export class CategorySeeder extends Seeder {
         name: element,
       });
     });
-
-    for (let i = 0; i < 20; i++) {
-      em.create(Category, {
-        name: faker.music.songName(),
-        parentId: faker.datatype.number({ min: 1, max: masterSeed.length }),
-      });
-    }
   }
 }
