@@ -1,40 +1,61 @@
+import { UpdateCategoryDto } from './dto/update-category.dto';
 import { CreateCategoryDto } from './dto/create-category.input';
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Patch,
+} from '@nestjs/common';
 import { CategoryService } from './category.service';
-import { Category } from './entities/category.entity';
 import { ParseIntPipe } from '@nestjs/common/pipes';
 
 @Controller('categories')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
-  @Get()
-  async index(): Promise<Category[]> {
-    return this.categoryService.fetchAll();
-  }
-
-  @Get('/getDeleted')
-  async getAllDeleted() {
-    return this.categoryService.getDeleted();
-  }
-
-  @Get('/getDeleted/:id')
-  async getDeleted(@Param('id', ParseIntPipe) id: number) {
-    return this.categoryService.getDeleted(id);
-  }
-
   @Post()
-  async store(@Body() createCategoryDto: CreateCategoryDto): Promise<Category> {
+  store(@Body() createCategoryDto: CreateCategoryDto) {
     return this.categoryService.create(createCategoryDto);
   }
 
-  @Post('/restore/:id')
-  async restore(@Param('id') id: number) {
-    return this.categoryService.restore(id);
+  @Get()
+  findAll() {
+    return this.categoryService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.categoryService.findOne(+id);
+  }
+
+  @Patch(':id')
+  update(
+    @Param('id') id: string,
+    @Body() updateCategoryDto: UpdateCategoryDto,
+  ) {
+    return this.categoryService.update(+id, updateCategoryDto);
   }
 
   @Delete('/:id')
-  async delete(@Param('id') id: number): Promise<void> {
-    return this.categoryService.delete(id);
+  delete(@Param('id') id: number) {
+    return this.categoryService.remove(+id);
+  }
+
+  @Post('/restore/:id')
+  restore(@Param('id') id: number) {
+    return this.categoryService.restore(+id);
+  }
+
+  @Get('/getRemoved')
+  getAllRemoved() {
+    return this.categoryService.getDeleted();
+  }
+
+  @Get('/getRemoved/:id')
+  getRemoved(@Param('id', ParseIntPipe) id: string) {
+    return this.categoryService.getDeleted(+id);
   }
 }
