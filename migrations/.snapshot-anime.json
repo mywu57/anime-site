@@ -52,11 +52,30 @@
           "nullable": false,
           "length": 6,
           "mappedType": "datetime"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamptz(0)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": 6,
+          "mappedType": "datetime"
         }
       },
       "name": "category",
       "schema": "public",
       "indexes": [
+        {
+          "columnNames": [
+            "deleted_at"
+          ],
+          "composite": false,
+          "keyName": "category_deleted_at_index",
+          "primary": false,
+          "unique": false
+        },
         {
           "keyName": "category_pkey",
           "columnNames": [

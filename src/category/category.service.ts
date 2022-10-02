@@ -1,8 +1,9 @@
+import { CreateCategoryDto } from './dto/create-category.input';
 import { QueryOrder, Entity } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
-import { Category } from './category.entity';
+import { Category } from './entities/category.entity';
 import { CustomCategoryRepository } from './category.repository';
 
 @Injectable()
@@ -16,7 +17,8 @@ export class CategoryService {
     return categories;
   }
 
-  async create(name, parentId): Promise<Category> {
+  async create(createCategoryDto: CreateCategoryDto): Promise<Category> {
+    const { name, parentId } = createCategoryDto;
     const category = this.categoryRepository.create({
       name,
       parentId,
@@ -27,5 +29,9 @@ export class CategoryService {
 
   async category(id: number) {
     return await this.categoryRepository.findOne({id: id});
+  }
+
+  async delete(id: number) {
+    return await this.categoryRepository.softDelete(id);
   }
 }

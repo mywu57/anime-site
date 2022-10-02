@@ -16,6 +16,6 @@ export class CategoryResolver {
     @Args('name') name: string,
     @Args('parentId') parentId: number,
   ) {
-    return this.categorySerivce.create(name, parentId);
+    // return this.categorySerivce.create(name, parentId);
   }
 }
