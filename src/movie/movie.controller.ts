@@ -39,4 +39,9 @@ export class MovieController {
   remove(@Param('id') id: string) {
     return this.movieService.remove(+id);
   }
+
+  @Post('restore/:id')
+  restore(@Param('id') id: string) {
+    return this.movieService.restore(+id);
+  }
 }
