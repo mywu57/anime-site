@@ -1,5 +1,6 @@
+import { UpdateCategoryDto } from './dto/update-category.dto';
 import { CreateCategoryDto } from './dto/create-category.input';
-import { QueryOrder, Entity } from '@mikro-orm/core';
+import { QueryOrder, wrap } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
 import { Category } from './entities/category.entity';
 import { CustomCategoryRepository } from './category.repository';
@@ -9,25 +10,32 @@ import { removeEmpty } from 'src/utils/helpers/validate.helper';
 export class CategoryService {
   constructor(private categoryRepository: CustomCategoryRepository) {}
 
-  async fetchAll(): Promise<Category[]> {
+  async create(createCategoryDto: CreateCategoryDto): Promise<Category> {
+    const category = this.categoryRepository.create(createCategoryDto);
+    await this.categoryRepository.persistAndFlush(category);
+    createCategoryDto = removeEmpty(createCategoryDto);
+    return category;
+  }
+
+  async findAll(): Promise<Category[]> {
     const categories = await this.categoryRepository.findAll({
       orderBy: { id: QueryOrder.ASC },
     });
     return categories;
   }
 
-  async create(createCategoryDto: CreateCategoryDto): Promise<Category> {
-    createCategoryDto = removeEmpty(createCategoryDto);
-    const category = this.categoryRepository.create(createCategoryDto);
-    await this.categoryRepository.persistAndFlush(category);
-    return category;
+  async findOne(id: number) {
+    return await this.categoryRepository.findOne(
+      { id: id },
+      { populate: ['movies'] },
+    );
   }
 
-  async category(id: number) {
-    return await this.categoryRepository.findOne({ id: id });
+  async update(id: number, updateCategory: UpdateCategoryDto) {
+    return `This action updates a #${id} tag`;
   }
 
-  async delete(id: number) {
+  async remove(id: number) {
     return await this.categoryRepository.softDelete(id);
   }
 
