@@ -3,12 +3,12 @@ import { CreateCategoryDto } from './dto/create-category.input';
 import { QueryOrder, wrap } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
 import { Category } from './entities/category.entity';
-import { CustomCategoryRepository } from './category.repository';
+import { CategoryRepository } from './category.repository';
 import { removeEmpty } from 'src/utils/helpers/validate.helper';
 
 @Injectable()
 export class CategoryService {
-  constructor(private categoryRepository: CustomCategoryRepository) {}
+  constructor(private categoryRepository: CategoryRepository) {}
 
   async create(createCategoryDto: CreateCategoryDto): Promise<Category> {
     const category = this.categoryRepository.create(createCategoryDto);
