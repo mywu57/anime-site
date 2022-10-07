@@ -1,7 +1,7 @@
 import { EntityRepository } from '@mikro-orm/postgresql';
 import { Category } from './entities/category.entity';
 
-export class CustomCategoryRepository extends EntityRepository<Category> {
+export class CategoryRepository extends EntityRepository<Category> {
   async getById(id: number) {
     const item = await this.findOne(id);
     if (item) {

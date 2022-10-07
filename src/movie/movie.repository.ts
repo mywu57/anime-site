@@ -1,7 +1,7 @@
 import { Movie } from './entities/movie.entity';
 import { EntityRepository } from '@mikro-orm/postgresql';
 
-export class CustomMovieRepository extends EntityRepository<Movie> {
+export class MovieRepository extends EntityRepository<Movie> {
   async getById(id: number) {
     const item = await this.findOne(id);
     if (item) {
