@@ -9,10 +9,8 @@ import {
   ManyToMany,
   Collection,
 } from '@mikro-orm/core';
-import WithSoftDelete from '../../utils/decorator/soft-delete.decorator';
 import { Origin } from './../../origin/entities/origin.entity';
 
-@WithSoftDelete()
 @Entity({ customRepository: () => CustomMovieRepository })
 export class Movie extends Base<Movie> {
   @Property()
