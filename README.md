@@ -29,7 +29,10 @@
 ## Installation
 
 ```bash
-$ npm install
+$ docker-compose up -d || $ docker-compose up -d --build //first time
+$ docker-compose exec nestjs sh
+$ npx mikro-orm migration:up
+$ npx mikro-orm seeder:run
 ```
 
 ## Running the app
