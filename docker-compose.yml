@@ -1,0 +1,62 @@
+version: "3"
+services:
+  nestjs:
+    container_name: wibu-site-nestjs
+    build:
+      dockerfile: Dockerfile
+      context: .
+    image: wibu-site-image
+    volumes:
+      - .:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
+    env_file:
+    - .env
+    command: npm run start:dev
+    networks:
+      - backend
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    networks:
+      - backend
+    ports:
+      - 5432:5432
+    volumes:
+      - docker-postgres:/var/lib/postgresql/data
+ 
+  pgadmin:
+    container_name: pgadmin
+    restart: always
+    image: dpage/pgadmin4
+    networks:
+      - backend
+    ports:
+      - 8080:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+
+networks:
+  backend:
+volumes:
+  docker-postgres:
+  pgadmin:
+  # mount node_module of container and local to debug
+  node_modules:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /node_modules
