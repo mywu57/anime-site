@@ -1,14 +1,14 @@
 import { removeEmpty } from './../utils/helpers/validate.helper';
 import { QueryOrder } from '@mikro-orm/core';
 import { Movie } from './entities/movie.entity';
-import { CustomMovieRepository } from './movie.repository';
+import { MovieRepository } from './movie.repository';
 import { Injectable } from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 
 @Injectable()
 export class MovieService {
-  constructor(private movieRepository: CustomMovieRepository) {}
+  constructor(private movieRepository: MovieRepository) {}
 
   async create(createMovieDto: CreateMovieDto) {
     createMovieDto = removeEmpty(createMovieDto);

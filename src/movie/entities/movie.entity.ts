@@ -1,5 +1,5 @@
 import { Base } from './../../utils/entities/base.entity';
-import { CustomMovieRepository } from './../movie.repository';
+import { MovieRepository } from './../movie.repository';
 import { Tag } from './../../tag/entities/tag.entity';
 import { Category } from './../../category/entities/category.entity';
 import {
@@ -9,11 +9,9 @@ import {
   ManyToMany,
   Collection,
 } from '@mikro-orm/core';
-import WithSoftDelete from '../../utils/decorator/soft-delete.decorator';
 import { Origin } from './../../origin/entities/origin.entity';
 
-@WithSoftDelete()
-@Entity({ customRepository: () => CustomMovieRepository })
+@Entity({ customRepository: () => MovieRepository })
 export class Movie extends Base<Movie> {
   @Property()
   name: string;
