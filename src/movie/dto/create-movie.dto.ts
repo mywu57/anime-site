@@ -36,4 +36,8 @@ export class CreateMovieDto {
   @ApiProperty()
   @IsOptional()
   episodeCount?: number;
+
+  @ApiProperty()
+  @IsOptional()
+  image?: string;
 }

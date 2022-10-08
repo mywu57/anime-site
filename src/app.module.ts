@@ -6,6 +6,7 @@ import { CategoryModule } from './category/category.module';
 import { MovieModule } from './movie/movie.module';
 import { TagModule } from './tag/tag.module';
 import { OriginModule } from './origin/origin.module';
+import { ImageModule } from './image/image.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { OriginModule } from './origin/origin.module';
     MovieModule,
     TagModule,
     OriginModule,
+    ImageModule,
   ],
 })
 export class AppModule {}

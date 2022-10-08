@@ -1,3 +1,5 @@
+import { Image } from './../image/entities/image.entity';
+import { EntityManager, AbstractSqlDriver } from '@mikro-orm/postgresql';
 import { removeEmpty } from './../utils/helpers/validate.helper';
 import { QueryOrder } from '@mikro-orm/core';
 import { Movie } from './entities/movie.entity';
@@ -8,12 +10,19 @@ import { UpdateMovieDto } from './dto/update-movie.dto';
 
 @Injectable()
 export class MovieService {
-  constructor(private movieRepository: MovieRepository) {}
+  constructor(private movieRepository: MovieRepository,
+    private em: EntityManager<AbstractSqlDriver>) {}
 
   async create(createMovieDto: CreateMovieDto) {
     createMovieDto = removeEmpty(createMovieDto);
+    const { image } = createMovieDto;
     const movie = this.movieRepository.create(createMovieDto);
     await this.movieRepository.persistAndFlush(movie);
+    console.log(movie.id);
+    if (!!image) {
+      const saveImage = new Image(image, movie);
+      await this.em.persistAndFlush(saveImage);
+    }
     return movie;
   }
 
