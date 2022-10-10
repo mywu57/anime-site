@@ -5,13 +5,19 @@ import { CustomMovieRepository } from './movie.repository';
 import { Injectable } from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
+import { Image } from './../image/entities/image.entity';
 
 @Injectable()
 export class MovieService {
   constructor(private movieRepository: CustomMovieRepository) {}
 
-  async create(createMovieDto: CreateMovieDto) {
-    createMovieDto = removeEmpty(createMovieDto);
+  async create(createMovieDto: CreateMovieDto, files: Array<Express.Multer.File>) {
+    createMovieDto = removeEmpty(createMovieDto)
+    const images = [];
+    files.forEach(file => {
+      images.push(new Image(file.filename, file.path))
+    });
+    createMovieDto.images = images;
     const movie = this.movieRepository.create(createMovieDto);
     await this.movieRepository.persistAndFlush(movie);
     return movie;
@@ -30,12 +36,16 @@ export class MovieService {
     });
   }
 
-  async update(id: number, updateMovieDto: UpdateMovieDto) {
+  async update(id: number, updateMovieDto: UpdateMovieDto, files: Array<Express.Multer.File>) {
     updateMovieDto = removeEmpty(updateMovieDto);
     const movie = await this.findOne(id);
+    const images = [];
+    files.forEach(file => {
+      images.push(new Image(file.filename, file.path))
+    });
+    updateMovieDto.images = images;
     this.movieRepository.assign(movie, updateMovieDto);
     await this.movieRepository.persistAndFlush(movie);
-    await this.movieRepository.populate(movie, ['tags']);
     return movie;
   }
 

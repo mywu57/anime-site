@@ -1,3 +1,4 @@
+import { Image } from './../../image/entities/image.entity';
 import { Origin } from './../../origin/entities/origin.entity';
 import { Tag } from './../../tag/entities/tag.entity';
 import { Collection } from '@mikro-orm/core';
@@ -24,7 +25,7 @@ export class CreateMovieDto {
 
   @ApiProperty({
     description: 'Array with tag id',
-    default: null
+    default: null,
   })
   @IsNotEmpty()
   origin: Origin;
@@ -36,4 +37,8 @@ export class CreateMovieDto {
   @ApiProperty()
   @IsOptional()
   episodeCount?: number;
+
+  @ApiProperty()
+  @IsOptional()
+  images?: Image[];
 }
