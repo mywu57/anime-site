@@ -8,9 +8,11 @@ import {
   Property,
   ManyToMany,
   Collection,
+  Embedded,
 } from '@mikro-orm/core';
 import WithSoftDelete from '../../utils/decorator/soft-delete.decorator';
 import { Origin } from './../../origin/entities/origin.entity';
+import { Image } from './../../image/entities/image.entity';
 
 @WithSoftDelete()
 @Entity({ customRepository: () => CustomMovieRepository })
@@ -35,6 +37,9 @@ export class Movie extends Base<Movie> {
 
   @Property()
   episodeCount: number;
+
+  @Embedded(() => Image, { array: true })
+  images: Image[] = [];
 
   constructor(
     name: string,

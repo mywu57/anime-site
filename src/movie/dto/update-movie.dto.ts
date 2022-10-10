@@ -1,3 +1,4 @@
+import { Image } from './../../image/entities/image.entity';
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateMovieDto } from './create-movie.dto';
 import { Origin } from './../../origin/entities/origin.entity';
@@ -35,4 +36,8 @@ export class UpdateMovieDto extends PartialType(CreateMovieDto) {
   @ApiProperty()
   @IsOptional()
   episodeCount?: number;
+
+  @ApiProperty()
+  @IsOptional()
+  images?: Image[];
 }
