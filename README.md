@@ -31,6 +31,7 @@
 ```bash
 $ docker-compose up -d || $ docker-compose up -d --build //first time
 $ docker-compose exec nestjs sh
+$ npm install
 $ npx mikro-orm migration:up
 $ npx mikro-orm seeder:run
 ```
