@@ -8,8 +8,10 @@ import {
   Property,
   ManyToMany,
   Collection,
+  Embedded,
 } from '@mikro-orm/core';
 import { Origin } from './../../origin/entities/origin.entity';
+import { Image } from './../../image/entities/image.entity';
 
 @Entity({ customRepository: () => MovieRepository })
 export class Movie extends Base<Movie> {
@@ -33,6 +35,9 @@ export class Movie extends Base<Movie> {
 
   @Property()
   episodeCount: number;
+
+  @Embedded(() => Image, { array: true })
+  images: Image[] = [];
 
   constructor(
     name: string,
