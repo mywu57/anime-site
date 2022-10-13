@@ -1,3 +1,4 @@
+import { ImageService } from './../image/image.service';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Movie } from './entities/movie.entity';
 import { Module } from '@nestjs/common';
@@ -7,6 +8,6 @@ import { MovieController } from './movie.controller';
 @Module({
   imports: [MikroOrmModule.forFeature([Movie])],
   controllers: [MovieController],
-  providers: [MovieService],
+  providers: [MovieService, ImageService],
 })
 export class MovieModule {}

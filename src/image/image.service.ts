@@ -1,26 +1,38 @@
+import { Image } from './entities/image.entity';
 import { Injectable } from '@nestjs/common';
-import { CreateImageDto } from './dto/create-image.dto';
-import { UpdateImageDto } from './dto/update-image.dto';
+import { S3 } from 'aws-sdk';
 
 @Injectable()
 export class ImageService {
-  create(createImageDto: CreateImageDto) {
-    return 'This action adds a new image';
+  async uploadS3(dataBuffer: Buffer, filename: string) {
+    const s3 = this.getS3();
+    const uploadResult = await s3
+      .upload({
+        Bucket: process.env.AWS_PUBLIC_BUCKET_NAME,
+        Body: dataBuffer,
+        Key: Date.now() + '-' + filename,
+        ACL: 'public-read',
+      })
+      .promise();
+    const newImage = new Image(uploadResult.Key, uploadResult.Location);
+    return newImage;
   }
 
-  findAll() {
-    return `This action returns all image`;
+  async deledeS3File(objects: any) {
+    const s3 = this.getS3();
+    await s3.deleteObjects({
+      Bucket: process.env.AWS_PUBLIC_BUCKET_NAME,
+      Delete: {
+        Objects: objects
+      },
+    }).promise();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} image`;
-  }
-
-  update(id: number, updateImageDto: UpdateImageDto) {
-    return `This action updates a #${id} image`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} image`;
+  getS3() {
+    return new S3({
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      region: process.env.AWS_REGION,
+    });
   }
 }

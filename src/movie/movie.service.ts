@@ -1,3 +1,4 @@
+import { ImageService } from './../image/image.service';
 import { removeEmpty } from './../utils/helpers/validate.helper';
 import { QueryOrder } from '@mikro-orm/core';
 import { Movie } from './entities/movie.entity';
@@ -5,18 +6,27 @@ import { MovieRepository } from './movie.repository';
 import { Injectable } from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
-import { Image } from './../image/entities/image.entity';
 
 @Injectable()
 export class MovieService {
-  constructor(private movieRepository: MovieRepository) {}
+  constructor(
+    private movieRepository: MovieRepository,
+    private imageService: ImageService,
+  ) {}
 
-  async create(createMovieDto: CreateMovieDto, files: Array<Express.Multer.File>) {
-    createMovieDto = removeEmpty(createMovieDto)
+  async create(
+    createMovieDto: CreateMovieDto,
+    files: Array<Express.Multer.File>,
+  ) {
+    createMovieDto = removeEmpty(createMovieDto);
     const images = [];
-    files.forEach(file => {
-      images.push(new Image(file.filename, file.path))
-    });
+    for await (const file of files) {
+      const newImage = await this.imageService.uploadS3(
+        file.buffer,
+        file.originalname,
+      );
+      images.push(newImage);
+    }
     createMovieDto.images = images;
     const movie = this.movieRepository.create(createMovieDto);
     await this.movieRepository.persistAndFlush(movie);
@@ -36,15 +46,30 @@ export class MovieService {
     });
   }
 
-  async update(id: number, updateMovieDto: UpdateMovieDto, files: Array<Express.Multer.File>) {
+  async update(
+    id: number,
+    updateMovieDto: UpdateMovieDto,
+    files: Array<Express.Multer.File>,
+  ) {
     updateMovieDto = removeEmpty(updateMovieDto);
     const movie = await this.findOne(id);
-    const images = [];
-    files.forEach(file => {
-      images.push(new Image(file.filename, file.path))
+    const oldImage = [];
+    movie.images.forEach(image => {
+      oldImage.push({
+        Key: image.fileName,
+      })
     });
+    const images = [];
+    for await (const file of files) {
+      const newImage = await this.imageService.uploadS3(
+        file.buffer,
+        file.originalname,
+      );
+      images.push(newImage);
+    }
     updateMovieDto.images = images;
     this.movieRepository.assign(movie, updateMovieDto);
+    this.imageService.deledeS3File(oldImage);
     await this.movieRepository.persistAndFlush(movie);
     return movie;
   }
