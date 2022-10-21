@@ -20,12 +20,14 @@ export class ImageService {
 
   async deledeS3File(objects: any) {
     const s3 = this.getS3();
-    await s3.deleteObjects({
-      Bucket: process.env.AWS_PUBLIC_BUCKET_NAME,
-      Delete: {
-        Objects: objects
-      },
-    }).promise();
+    await s3
+      .deleteObjects({
+        Bucket: process.env.AWS_PUBLIC_BUCKET_NAME,
+        Delete: {
+          Objects: objects,
+        },
+      })
+      .promise();
   }
 
   getS3() {

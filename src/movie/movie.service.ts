@@ -54,10 +54,10 @@ export class MovieService {
     updateMovieDto = removeEmpty(updateMovieDto);
     const movie = await this.findOne(id);
     const oldImage = [];
-    movie.images.forEach(image => {
+    movie.images.forEach((image) => {
       oldImage.push({
         Key: image.fileName,
-      })
+      });
     });
     const images = [];
     for await (const file of files) {
