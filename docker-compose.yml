@@ -5,6 +5,7 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
+      target: development
     image: wibu-site-image
     volumes:
       - .:/usr/src/app
