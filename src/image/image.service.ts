@@ -1,9 +1,12 @@
 import { Image } from './entities/image.entity';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { S3 } from 'aws-sdk';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Injectable()
 export class ImageService {
+  constructor(private readonly cloudinaryService: CloudinaryService) { }
+
   async uploadS3(dataBuffer: Buffer, filename: string) {
     const s3 = this.getS3();
     const uploadResult = await s3
@@ -33,6 +36,12 @@ export class ImageService {
       accessKeyId: process.env.AWS_ACCESS_KEY_ID,
       secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
       region: process.env.AWS_REGION,
+    });
+  }
+
+  async uploadImageToCloudinary(file: Express.Multer.File) {
+    return await this.cloudinaryService.uploadImage(file).catch(() => {
+      throw new BadRequestException('Invalid file type.');
     });
   }
 }

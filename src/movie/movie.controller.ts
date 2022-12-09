@@ -8,15 +8,16 @@ import {
   Delete,
   UseInterceptors,
   UploadedFiles,
+  UploadedFile,
 } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('movies')
 export class MovieController {
-  constructor(private readonly movieService: MovieService) {}
+  constructor(private readonly movieService: MovieService) { }
 
   @Post()
   @UseInterceptors(FilesInterceptor('images'))
@@ -55,5 +56,18 @@ export class MovieController {
   @Post('restore/:id')
   restore(@Param('id') id: string) {
     return this.movieService.restore(+id);
+  }
+
+  // @Post('create-cloudinary')
+  // @UseInterceptors(FileInterceptor('file'))
+  // uploadImage(
+  //   @Body() createMovieDto: CreateMovieDto,
+  //   @UploadedFile() file: Express.Multer.File) {
+  //   return this.movieService.createCloudinary(createMovieDto, file);
+  // }
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadImage(@UploadedFile() file: Express.Multer.File) {
+    return this.movieService.createCloudinary(file);
   }
 }

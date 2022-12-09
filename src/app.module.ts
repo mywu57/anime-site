@@ -7,6 +7,7 @@ import { TagModule } from './tag/tag.module';
 import { OriginModule } from './origin/origin.module';
 import { ImageModule } from './image/image.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { MulterModule } from '@nestjs/platform-express';
     TagModule,
     OriginModule,
     ImageModule,
+    CloudinaryModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }

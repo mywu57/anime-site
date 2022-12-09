@@ -3,7 +3,7 @@ import { removeEmpty } from './../utils/helpers/validate.helper';
 import { QueryOrder } from '@mikro-orm/core';
 import { Movie } from './entities/movie.entity';
 import { MovieRepository } from './movie.repository';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 
@@ -12,7 +12,7 @@ export class MovieService {
   constructor(
     private movieRepository: MovieRepository,
     private imageService: ImageService,
-  ) {}
+  ) { }
 
   async create(
     createMovieDto: CreateMovieDto,
@@ -31,6 +31,23 @@ export class MovieService {
     const movie = this.movieRepository.create(createMovieDto);
     await this.movieRepository.persistAndFlush(movie);
     return movie;
+  }
+
+  async createCloudinary(
+    // createMovieDto: CreateMovieDto,
+    file: Express.Multer.File,
+  ) {
+    //   createMovieDto = removeEmpty(createMovieDto);
+    //   const images = [];
+    //   const newImage = await this.imageService.uploadImageToCloudinary(file);
+    //   images.push(newImage);
+    //   createMovieDto.images = images;
+    //   const movie = this.movieRepository.create(createMovieDto);
+    //   await this.movieRepository.persistAndFlush(movie);
+    //   return movie;
+    return await this.imageService.uploadImageToCloudinary(file).catch(() => {
+      throw new BadRequestException('Invalid file type.');
+    });
   }
 
   async findAll(): Promise<Movie[]> {
