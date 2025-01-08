@@ -55,9 +55,9 @@ volumes:
   docker-postgres:
   pgadmin:
   # mount node_module of container and local to debug
-  # node_modules:
-  #   driver: local
-  #   driver_opts:
-  #     type: none
-  #     o: bind
-  #     device: /node_modules
+  node_modules:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /node_modules

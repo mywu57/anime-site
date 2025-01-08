@@ -7,6 +7,9 @@ import { TagModule } from './tag/tag.module';
 import { OriginModule } from './origin/origin.module';
 import { ImageModule } from './image/image.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { User } from './user/entities/user.entity';
 
 @Module({
   imports: [
@@ -20,6 +23,8 @@ import { MulterModule } from '@nestjs/platform-express';
     TagModule,
     OriginModule,
     ImageModule,
+    UserModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
